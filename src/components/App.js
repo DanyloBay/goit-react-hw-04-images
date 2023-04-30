@@ -16,6 +16,8 @@ export const App = () => {
   const [status, setStatus] = useState('idle');
   const [showBtn, setShowBtn] = useState(false);
 
+  console.log(error);
+
   useEffect(() => {
     const fetchData = async () => {
       if (!searchQuery) {
