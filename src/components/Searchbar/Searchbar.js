@@ -1,61 +1,53 @@
 import Notiflix from 'notiflix';
-import { Component } from 'react';
+import { useState } from 'react';
 import './Searchbar.scss';
 import { AiOutlineSearch } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 
-export class SearchBar extends Component {
-  state = {
-    searchQuery: '',
+export const SearchBar = ({ onSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleInputChange = ({ target: { value } }) => {
+    setSearchQuery(value);
   };
 
-  handleInputChange = ({ target: { name, value } }) => {
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleSearchSubmit = e => {
+  const handleSearchSubmit = e => {
     e.preventDefault();
-    if (this.state.searchQuery.trim() === '') {
+    if (searchQuery.trim() === '') {
       Notiflix.Notify.info('Please enter search info!');
       return;
     }
-    this.props.onSubmit(this.state.searchQuery);
-    this.reset();
+    onSubmit(searchQuery);
+    reset();
   };
 
-  reset = () => {
-    this.setState({
-      searchQuery: '',
-    });
+  const reset = () => {
+    setSearchQuery('');
   };
 
-  render() {
-    return (
-      <header className="searchbar">
-        <form className="searchbar__form" onSubmit={this.handleSearchSubmit}>
-          <button type="submit" className="searchbar__button">
-            <AiOutlineSearch
-              style={{ color: 'white', width: '25px', height: '25px' }}
-            />
-          </button>
-
-          <input
-            className="searchbar__input"
-            type="text"
-            name="searchQuery"
-            autoComplete="off"
-            autoFocus
-            value={this.state.searchQuery}
-            placeholder="Search images and photos"
-            onChange={this.handleInputChange}
+  return (
+    <header className="searchbar">
+      <form className="searchbar__form" onSubmit={handleSearchSubmit}>
+        <button type="submit" className="searchbar__button">
+          <AiOutlineSearch
+            style={{ color: 'white', width: '25px', height: '25px' }}
           />
-        </form>
-      </header>
-    );
-  }
-}
+        </button>
+
+        <input
+          className="searchbar__input"
+          type="text"
+          name="searchQuery"
+          autoComplete="off"
+          autoFocus
+          value={searchQuery}
+          placeholder="Search images and photos"
+          onChange={handleInputChange}
+        />
+      </form>
+    </header>
+  );
+};
 
 SearchBar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
